@@ -144,12 +144,10 @@ int main(void){
 	while (1){
 		/* captureImg operates in bytes not pixels in some cases pixels are two bytes per pixel
 		 * So for the width (if you were reading 640x480) you would put 1280 if you are reading yuv422 or rgb565 */
-		/*uint8_t x=31;
+		/*uint8_t x=63;//Uncomment this block to test divider settings note the other line you need to uncomment
 		do{
 			wrReg(0x11,x);
-			_delay_ms(1000);
-			captureImg(320*2,240);
-		}while(--x);*/
+			_delay_ms(1000);*/
 		#ifdef useVga
 			captureImg(640,480);
 		#elif defined(useQvga)
@@ -157,5 +155,6 @@ int main(void){
 		#else
 			captureImg(160*2,120);
 		#endif
+		//}while(--x);//Uncomment this line to test divider settings
 	}
 }
