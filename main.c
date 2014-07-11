@@ -20,9 +20,9 @@ static void captureImg(uint16_t wg,uint16_t hg){
 	//first wait for vsync it is on pin 3 (counting from 0) portD
 	uint16_t lg2;
 	uint8_t x;
-	StringPgm(PSTR("REG"));
+	/*StringPgm(PSTR("REG"));
 	for(x=0;x<=0xC9;++x)
-		serialWrB(rdReg(x));
+		serialWrB(rdReg(x));*/
 	StringPgm(PSTR("RDY"));
 	while(!(PIND&8));//wait for high
 	while((PIND&8));//wait for low
@@ -60,11 +60,18 @@ int main(void){
 	UCSR0C=6;//async 1 stop bit 8bit char no parity bits
 	camInit();
 	setRes(vga);
-	setColor(yuv422);
-	wrReg(0x11,63);
+	setColor(bayerRGB);
+	wrReg(0x11,25);/* If you are not sure what value to use here for the divider
+	* run the commeted out test below and pick the smallest value that gets a correct image */
 	while (1){
 		/* captureImg operates in bytes not pixels in some cases pixels are two bytes per pixel
-		 * so that is why you see 1280 used instead of 640 */ 
-		captureImg(1280,480);
+		 * So for the width (if you were reading 640x480) you would put 1280 if you are reading yuv422 or rgb565 */
+		/*uint8_t x=63;
+		do{
+			wrReg(0x11,x);
+			_delay_ms(1000);
+			captureImg(640,480);
+		}while(--x);*/
+		captureImg(640,480);
 	}
 }
