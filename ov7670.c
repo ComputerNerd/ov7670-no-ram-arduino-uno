@@ -46,8 +46,8 @@ static uint8_t twiRd(uint8_t nack){
 	if (nack){
 		TWCR=_BV(TWINT) | _BV(TWEN);
 		while ((TWCR & _BV(TWINT)) == 0);	/* wait for transmission */
-	if ((TWSR & 0xF8) != TW_MR_DATA_NACK)
-		error_led();
+		if ((TWSR & 0xF8) != TW_MR_DATA_NACK)
+			error_led();
 		return TWDR;
 	}else{
 		TWCR=_BV(TWINT) | _BV(TWEN) | _BV(TWEA);
@@ -78,23 +78,23 @@ static void wrSensorRegs8_8(const struct regval_list reglist[]){
 		reg_addr = pgm_read_byte(&next->reg_num);
 		reg_val = pgm_read_byte(&next->value);
 		wrReg(reg_addr, reg_val);
-	   	next++;
+		next++;
 	}
 }
 void setColor(uint8_t color){
 	switch(color){
 		case yuv422:
 			wrSensorRegs8_8(yuv422_ov7670);
-		break;
+			break;
 		case rgb565:
 			wrSensorRegs8_8(rgb565_ov7670);
 			{uint8_t temp=rdReg(0x11);
-			_delay_ms(1);
-			wrReg(0x11,temp);}//accorind to the linux kernel driver rgb565 PCLK needs re-writting
-		break;
+				_delay_ms(1);
+				wrReg(0x11,temp);}//accorind to the linux kernel driver rgb565 PCLK needs re-writting
+			break;
 		case bayerRGB:
 			wrSensorRegs8_8(bayerRGB_ov7670);
-		break;
+			break;
 	}
 }
 void setRes(uint8_t res){
@@ -102,11 +102,11 @@ void setRes(uint8_t res){
 		case vga:
 			wrReg(REG_COM3,0);	// REG_COM3
 			wrSensorRegs8_8(vga_ov7670);
-		break;
+			break;
 		case qvga:
 			wrReg(REG_COM3,4);	// REG_COM3 enable scaling
 			wrSensorRegs8_8(qvga_ov7670);
-		break;
+			break;
 		case qqvga:
 			wrReg(REG_COM3,4);	// REG_COM3 enable scaling
 			wrSensorRegs8_8(qqvga_ov7670);

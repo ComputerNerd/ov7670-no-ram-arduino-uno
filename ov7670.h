@@ -248,7 +248,7 @@ void camInit(void);
 #define REG_COM17       0x42    /* Control 17 */
 #define COM17_AECWIN    0xc0    /* AEC window - must match COM4 */
 #define COM17_CBAR      0x08    /* DSP Color bar */
- 
+
 #define CMATRIX_LEN 6
 #define REG_BRIGHT      0x55    /* Brightness */
 #define REG_REG76       0x76    /* OV's name */
@@ -266,7 +266,7 @@ void camInit(void);
 #define REG_HAECC6      0xa9    /* Hist AEC/AGC control 6 */
 #define REG_HAECC7      0xaa    /* Hist AEC/AGC control 7 */
 #define REG_BD60MAX     0xab    /* 60hz banding step limit */
- 
+
 #define MTX1            0x4f    /* Matrix Coefficient 1 */
 #define MTX2            0x50    /* Matrix Coefficient 2 */
 #define MTX3            0x51    /* Matrix Coefficient 3 */

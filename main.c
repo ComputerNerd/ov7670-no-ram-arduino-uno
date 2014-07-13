@@ -9,8 +9,8 @@
 /* Configuration: this lets you easily change between different resolutions
  * You must only uncomment one
  * no more no less*/
-//#define useVga
-#define useQvga
+#define useVga
+//#define useQvga
 //#define useQqvga
 
 static inline void serialWrB(uint8_t dat){
@@ -25,81 +25,81 @@ static void StringPgm(char * str){
 }
 static void captureImg(uint16_t wg,uint16_t hg){
 	uint16_t lg2;
-	#ifdef useQvga
-		uint8_t buf[640];
-	#elif defined(useQqvga)
-		uint8_t buf[320];
-	#endif
+#ifdef useQvga
+	uint8_t buf[640];
+#elif defined(useQqvga)
+	uint8_t buf[320];
+#endif
 	/*StringPgm(PSTR("REG"));
-	for(x=0;x<=0xC9;++x)
-		serialWrB(rdReg(x));*/
+	  for(x=0;x<=0xC9;++x)
+	  serialWrB(rdReg(x));*/
 	StringPgm(PSTR("RDY"));
 	//Wait for vsync it is on pin 3 (counting from 0) portD
 	while(!(PIND&8));//wait for high
 	while((PIND&8));//wait for low
-	#ifdef useVga
-		while(hg--){
-			lg2=wg;
-			while(lg2--){
-				while((PIND&4));//wait for low
-				UDR0=(PINC&15)|(PIND&240);
-				while(!(PIND&4));//wait for high
-			}
+#ifdef useVga
+	while(hg--){
+		lg2=wg;
+		while(lg2--){
+			while((PIND&4));//wait for low
+			UDR0=(PINC&15)|(PIND&240);
+			while(!(PIND&4));//wait for high
 		}
-	#elif defined(useQvga)
-		/*We send half of the line while reading then half later */
-		while(hg--){
-			uint8_t*b=buf,*b2=buf;
-			lg2=wg/2;
-			while(lg2--){
-				while((PIND&4));//wait for low
-				*b++=(PINC&15)|(PIND&240);
-				while(!(PIND&4));//wait for high
-				while((PIND&4));//wait for low
-				*b++=(PINC&15)|(PIND&240);
-				UDR0=*b2++;
-				while(!(PIND&4));//wait for high
-			}
-			/* Finish sending the remainder during blanking */
-			lg2=wg/2;
+	}
+#elif defined(useQvga)
+	/*We send half of the line while reading then half later */
+	while(hg--){
+		uint8_t*b=buf,*b2=buf;
+		lg2=wg/2;
+		while(lg2--){
+			while((PIND&4));//wait for low
+			*b++=(PINC&15)|(PIND&240);
+			while(!(PIND&4));//wait for high
+			while((PIND&4));//wait for low
+			*b++=(PINC&15)|(PIND&240);
+			UDR0=*b2++;
+			while(!(PIND&4));//wait for high
+		}
+		/* Finish sending the remainder during blanking */
+		lg2=wg/2;
+		while(!( UCSR0A & (1<<UDRE0)));//wait for byte to transmit
+		while(lg2--){
+			UDR0=*b2++;
 			while(!( UCSR0A & (1<<UDRE0)));//wait for byte to transmit
-			while(lg2--){
-				UDR0=*b2++;
-				while(!( UCSR0A & (1<<UDRE0)));//wait for byte to transmit
-			}
 		}
-	#else
-		/* This code is very similar to qvga sending code except we have even more blanking time to take advantage of */
-		while(hg--){
-			uint8_t*b=buf,*b2=buf;
-			lg2=wg/5;
-			while(lg2--){
-				while((PIND&4));//wait for low
-				*b++=(PINC&15)|(PIND&240);
-				while(!(PIND&4));//wait for high
-				while((PIND&4));//wait for low
-				*b++=(PINC&15)|(PIND&240);
-				while(!(PIND&4));//wait for high
-				while((PIND&4));//wait for low
-				*b++=(PINC&15)|(PIND&240);
-				while(!(PIND&4));//wait for high
-				while((PIND&4));//wait for low
-				*b++=(PINC&15)|(PIND&240);
-				while(!(PIND&4));//wait for high
-				while((PIND&4));//wait for low
-				*b++=(PINC&15)|(PIND&240);
-				UDR0=*b2++;
-				while(!(PIND&4));//wait for high
-			}
-			/* Finish sending the remainder during blanking */
-			lg2=320-(wg/5);
+	}
+#else
+	/* This code is very similar to qvga sending code except we have even more blanking time to take advantage of */
+	while(hg--){
+		uint8_t*b=buf,*b2=buf;
+		lg2=wg/5;
+		while(lg2--){
+			while((PIND&4));//wait for low
+			*b++=(PINC&15)|(PIND&240);
+			while(!(PIND&4));//wait for high
+			while((PIND&4));//wait for low
+			*b++=(PINC&15)|(PIND&240);
+			while(!(PIND&4));//wait for high
+			while((PIND&4));//wait for low
+			*b++=(PINC&15)|(PIND&240);
+			while(!(PIND&4));//wait for high
+			while((PIND&4));//wait for low
+			*b++=(PINC&15)|(PIND&240);
+			while(!(PIND&4));//wait for high
+			while((PIND&4));//wait for low
+			*b++=(PINC&15)|(PIND&240);
+			UDR0=*b2++;
+			while(!(PIND&4));//wait for high
+		}
+		/* Finish sending the remainder during blanking */
+		lg2=320-(wg/5);
+		while(!( UCSR0A & (1<<UDRE0)));//wait for byte to transmit
+		while(lg2--){
+			UDR0=*b2++;
 			while(!( UCSR0A & (1<<UDRE0)));//wait for byte to transmit
-			while(lg2--){
-				UDR0=*b2++;
-				while(!( UCSR0A & (1<<UDRE0)));//wait for byte to transmit
-			}
 		}
-	#endif
+	}
+#endif
 }
 int main(void){
 	cli();//disable interupts
@@ -125,36 +125,36 @@ int main(void){
 	UCSR0B = (1<<RXEN0)|(1<<TXEN0);//Enable receiver and transmitter
 	UCSR0C=6;//async 1 stop bit 8bit char no parity bits
 	camInit();
-	#ifdef useVga
-		setRes(vga);
-		setColor(bayerRGB);
-		wrReg(0x11,25);
-	#elif defined(useQvga)
-		setRes(qvga);
-		setColor(yuv422);
-		wrReg(0x11,12);
-	#else
-		setRes(qqvga);
-		setColor(yuv422);
-		wrReg(0x11,3);
-	#endif
+#ifdef useVga
+	setRes(vga);
+	setColor(bayerRGB);
+	wrReg(0x11,25);
+#elif defined(useQvga)
+	setRes(qvga);
+	setColor(yuv422);
+	wrReg(0x11,12);
+#else
+	setRes(qqvga);
+	setColor(yuv422);
+	wrReg(0x11,3);
+#endif
 	/* If you are not sure what value to use here for the divider (register 0x11)
-	* Values I have found to work raw vga 25 qqvga yuv422 12 qvga yuv422 21
-	* run the commeted out test below and pick the smallest value that gets a correct image */
+	 * Values I have found to work raw vga 25 qqvga yuv422 12 qvga yuv422 21
+	 * run the commeted out test below and pick the smallest value that gets a correct image */
 	while (1){
 		/* captureImg operates in bytes not pixels in some cases pixels are two bytes per pixel
 		 * So for the width (if you were reading 640x480) you would put 1280 if you are reading yuv422 or rgb565 */
 		/*uint8_t x=63;//Uncomment this block to test divider settings note the other line you need to uncomment
-		do{
-			wrReg(0x11,x);
-			_delay_ms(1000);*/
-		#ifdef useVga
-			captureImg(640,480);
-		#elif defined(useQvga)
-			captureImg(320*2,240);
-		#else
-			captureImg(160*2,120);
-		#endif
+		  do{
+		  wrReg(0x11,x);
+		  _delay_ms(1000);*/
+#ifdef useVga
+		captureImg(640,480);
+#elif defined(useQvga)
+		captureImg(320*2,240);
+#else
+		captureImg(160*2,120);
+#endif
 		//}while(--x);//Uncomment this line to test divider settings
 	}
 }
