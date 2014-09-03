@@ -30,9 +30,6 @@ static void captureImg(uint16_t wg,uint16_t hg){
 #elif defined(useQqvga)
 	uint8_t buf[320];
 #endif
-	/*StringPgm(PSTR("REG"));
-	  for(x=0;x<=0xC9;++x)
-	  serialWrB(rdReg(x));*/
 	StringPgm(PSTR("RDY"));
 	//Wait for vsync it is on pin 3 (counting from 0) portD
 	while(!(PIND&8));//wait for high
@@ -102,7 +99,7 @@ static void captureImg(uint16_t wg,uint16_t hg){
 #endif
 }
 int main(void){
-	cli();//disable interupts
+	cli();//disable interrupts
 	/* Setup the 8mhz PWM clock 
 	 * This will be on pin 11*/
 	DDRB|=(1<<3);//pin 11
@@ -111,14 +108,12 @@ int main(void){
 	TCCR2B=(1<<WGM22)|(1<<CS20);
 	OCR2A=0;//(F_CPU)/(2*(X+1))
 	DDRC&=~15;//low d0-d3 camera
-	DDRD&=~252;//d7-d4 and interupt pins
+	DDRD&=~252;//d7-d4 and interrupt pins
 	_delay_ms(3000);
 	//set up twi for 100khz
 	TWSR&=~3;//disable prescaler for TWI
 	TWBR=72;//set to 100khz
 	//enable serial
-	//UBRR0H = (unsigned char)(MYUBRR>>8);
-	//UBRR0L = (unsigned char)MYUBRR&255;
 	UBRR0H=0;
 	UBRR0L=1;//3 = 0.5M 2M baud rate = 0 7 = 250k 207 is 9600 baud rate
 	UCSR0A|=2;//double speed aysnc
@@ -140,7 +135,7 @@ int main(void){
 #endif
 	/* If you are not sure what value to use here for the divider (register 0x11)
 	 * Values I have found to work raw vga 25 qqvga yuv422 12 qvga yuv422 21
-	 * run the commeted out test below and pick the smallest value that gets a correct image */
+	 * run the commented out test below and pick the smallest value that gets a correct image */
 	while (1){
 		/* captureImg operates in bytes not pixels in some cases pixels are two bytes per pixel
 		 * So for the width (if you were reading 640x480) you would put 1280 if you are reading yuv422 or rgb565 */
