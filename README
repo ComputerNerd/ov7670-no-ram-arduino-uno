@@ -1,7 +1,7 @@
 This is a version of code that sends data to the PC.
 Unlike previous code this requries no external ram or fifo.
 It just sends the data as it recevices it.
-The transfer rate is .5 mbps or 64kbytes per second
+The transfer rate is 1 mbps or 128kbytes per second
 Connections
 Order arduino ov7670
 A5->SIOC
