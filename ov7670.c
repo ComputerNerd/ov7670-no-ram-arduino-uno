@@ -89,8 +89,8 @@ void setColor(uint8_t color){
 		case rgb565:
 			wrSensorRegs8_8(rgb565_ov7670);
 			{uint8_t temp=rdReg(0x11);
-				_delay_ms(1);
-				wrReg(0x11,temp);}//according to the linux kernel driver rgb565 PCLK needs re-writting
+			_delay_ms(1);
+			wrReg(0x11,temp);}//according to the linux kernel driver rgb565 PCLK needs re-writting
 		break;
 		case bayerRGB:
 			wrSensorRegs8_8(bayerRGB_ov7670);

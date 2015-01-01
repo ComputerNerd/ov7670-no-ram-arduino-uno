@@ -18,7 +18,7 @@ static inline void serialWrB(uint8_t dat){
 	UDR0=dat;
 	while(!( UCSR0A & (1<<UDRE0)));//wait for byte to transmit
 }
-static void StringPgm(char * str){
+static void StringPgm(const char * str){
 	do{
 		serialWrB(pgm_read_byte_near(str));
 	}while(pgm_read_byte_near(++str));
