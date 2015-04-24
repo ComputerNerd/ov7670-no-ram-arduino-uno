@@ -121,16 +121,16 @@ int main(void){
 	UCSR0C=6;//async 1 stop bit 8bit char no parity bits
 	camInit();
 #ifdef useVga
-	setRes(vga);
-	setColor(bayerRGB);
+	setRes(VGA);
+	setColorSpace(BAYER_RGB);
 	wrReg(0x11,25);
 #elif defined(useQvga)
-	setRes(qvga);
-	setColor(yuv422);
+	setRes(QVGA);
+	setColorSpace(YUV422);
 	wrReg(0x11,12);
 #else
-	setRes(qqvga);
-	setColor(yuv422);
+	setRes(QQVGA);
+	setColorSpace(YUV422);
 	wrReg(0x11,3);
 #endif
 	/* If you are not sure what value to use here for the divider (register 0x11)
