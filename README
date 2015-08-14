@@ -22,3 +22,5 @@ A3<-3
 2<-PCLK
 GND->PWDN
 3.3->RESET
+GND->GND
+3.3v->3.3v

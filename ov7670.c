@@ -229,7 +229,7 @@ static uint8_t twiRd(uint8_t nack){
 uint8_t rdReg(uint8_t reg){
 	uint8_t dat;
 	twiStart();
-	twiWriteByte(OV7670_I2C_ADDRESS,TW_MT_SLA_ACK);
+	twiWriteByte(OV7670_I2C_ADDRESS<<1,TW_MT_SLA_ACK);
 	twiWriteByte(reg,TW_MT_DATA_ACK);
 	TWCR = (1<<TWINT)|(1<<TWEN)|(1<<TWSTO);//send stop
 	_delay_ms(1);
