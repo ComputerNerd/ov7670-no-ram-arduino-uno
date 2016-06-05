@@ -5,7 +5,7 @@
 #include <util/delay.h>
 #include <avr/pgmspace.h>
 #include "ov7670.h"
-static const struct regval_list vga_ov7670[] = {
+static const struct regval_list vga_ov7670[] PROGMEM = {
 	{REG_HREF,0xF6},	// was B6  
 	{0x17,0x13},		// HSTART
 	{0x18,0x01},		// HSTOP
@@ -14,7 +14,7 @@ static const struct regval_list vga_ov7670[] = {
 	{REG_VREF,0x0a},	// VREF
 	{0xff, 0xff},		/* END MARKER */
 };
-static const struct regval_list qvga_ov7670[] = {
+static const struct regval_list qvga_ov7670[] PROGMEM = {
 	{REG_COM14, 0x19},
 	{0x72, 0x11},
 	{0x73, 0xf1},
@@ -26,7 +26,7 @@ static const struct regval_list qvga_ov7670[] = {
 	{REG_VREF,0x0a},
 	{0xff, 0xff},	/* END MARKER */
 };
-static const struct regval_list qqvga_ov7670[] = {
+static const struct regval_list qqvga_ov7670[] PROGMEM = {
 	{REG_COM14, 0x1a},	// divide by 4
 	{0x72, 0x22},		// downsample by 4
 	{0x73, 0xf2},		// divide by 4
@@ -38,7 +38,7 @@ static const struct regval_list qqvga_ov7670[] = {
 	{REG_VREF,0x0a},
 	{0xff, 0xff},	/* END MARKER */
 };
-static const struct regval_list yuv422_ov7670[] = {
+static const struct regval_list yuv422_ov7670[] PROGMEM = {
 	{REG_COM7, 0x0},	/* Selects YUV mode */
 	{REG_RGB444, 0},	/* No RGB444 please */
 	{REG_COM1, 0},
@@ -53,7 +53,7 @@ static const struct regval_list yuv422_ov7670[] = {
 	{REG_COM13,/*COM13_GAMMA|*/COM13_UVSAT},
 	{0xff, 0xff},		/* END MARKER */
 };
-static const struct regval_list rgb565_ov7670[] = {
+static const struct regval_list rgb565_ov7670[] PROGMEM = {
 	{REG_COM7, COM7_RGB}, /* Selects RGB mode */
 	{REG_RGB444, 0},	  /* No RGB444 please */
 	{REG_COM1, 0x0},
@@ -68,14 +68,14 @@ static const struct regval_list rgb565_ov7670[] = {
 	{REG_COM13, /*COM13_GAMMA|*/COM13_UVSAT},
 	{0xff, 0xff},	/* END MARKER */
 };
-static const struct regval_list bayerRGB_ov7670[] = {
+static const struct regval_list bayerRGB_ov7670[] PROGMEM = {
 	{REG_COM7, COM7_BAYER},
 	{REG_COM13, 0x08}, /* No gamma, magic rsvd bit */
 	{REG_COM16, 0x3d}, /* Edge enhancement, denoise */
 	{REG_REG76, 0xe1}, /* Pix correction, magic rsvd */
 	{0xff, 0xff},	/* END MARKER */
 };
-static const struct regval_list ov7670_default_regs[] = {//from the linux driver
+static const struct regval_list ov7670_default_regs[] PROGMEM = {//from the linux driver
 	{REG_COM7, COM7_RESET},
 	{REG_TSLB,  0x04},	/* OV */
 	{REG_COM7, 0},	/* VGA */
